@@ -13,7 +13,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     private Button buttonDash, buttonWho;
-    private ImageButton play, pause, stop;
+    private ImageButton play, pause, stop, mute;
     private MediaPlayer audioBackground;
 
     @Override
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         play = (ImageButton) findViewById(R.id.play);
         pause = (ImageButton) findViewById(R.id.pause);
         stop = (ImageButton) findViewById(R.id.stop);
+        mute = (ImageButton) findViewById(R.id.mute);
 
         stateAwal();
 
@@ -50,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 stop();
+            }
+        });
+
+        mute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mute();
             }
         });
 
@@ -124,5 +132,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         stateAwal();
+    }
+
+    private void mute() {
+        if(audioBackground.isPlaying()){
+            if(audioBackground!=null){
+                audioBackground.setVolume(0, 0);
+                mute.setImageResource(R.drawable.ic_volume);
+            }
+        } else {
+            if(audioBackground!=null){
+                audioBackground.setVolume(100, 100);
+                pause.setImageResource(R.drawable.ic_volume_off);
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        audioBackground.stop();
+        MainActivity.this.finish();
     }
 }

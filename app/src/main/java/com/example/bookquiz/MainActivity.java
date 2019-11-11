@@ -13,7 +13,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     private Button buttonDash, buttonWho;
-    private ImageButton play, pause, stop, mute;
+    private ImageButton pause, stop;
     private MediaPlayer audioBackground;
 
     @Override
@@ -23,20 +23,25 @@ public class MainActivity extends AppCompatActivity {
 
         audioBackground = new MediaPlayer();
 
-        play = (ImageButton) findViewById(R.id.play);
         pause = (ImageButton) findViewById(R.id.pause);
         stop = (ImageButton) findViewById(R.id.stop);
-        mute = (ImageButton) findViewById(R.id.mute);
 
         stateAwal();
 
-        play.setOnClickListener(new View.OnClickListener() {
+        audioBackground = MediaPlayer.create(this, R.raw.soundy);
+        try {
+            audioBackground.prepare();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        audioBackground.start();
+
+        audioBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
-            public void onClick(View v) {
-                play();
-                play.setEnabled(false);
-                pause.setEnabled(true);
-                stop.setEnabled(true);
+            public void onCompletion(MediaPlayer mp) {
+                stateAwal();
             }
         });
 
@@ -51,13 +56,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 stop();
-            }
-        });
-
-        mute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mute();
             }
         });
 
@@ -81,30 +79,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stateAwal(){
-        play.setEnabled(true);
-        pause.setEnabled(false);
+        pause.setEnabled(true);
         stop.setEnabled(false);
-    }
-
-    private void play() {
-        audioBackground = MediaPlayer.create(this, R.raw.soundy);
-
-        try {
-            audioBackground.prepare();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        audioBackground.start();
-
-        audioBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                stateAwal();
-            }
-        });
     }
 
     public void pause(){
@@ -132,20 +108,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         stateAwal();
-    }
-
-    private void mute() {
-        if(audioBackground.isPlaying()){
-            if(audioBackground!=null){
-                audioBackground.setVolume(0, 0);
-                mute.setImageResource(R.drawable.ic_volume);
-            }
-        } else {
-            if(audioBackground!=null){
-                audioBackground.setVolume(100, 100);
-                pause.setImageResource(R.drawable.ic_volume_off);
-            }
-        }
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.bookquiz;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -26,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
         pause = (ImageButton) findViewById(R.id.pause);
         stop = (ImageButton) findViewById(R.id.stop);
 
-        stateAwal();
-
         audioBackground = MediaPlayer.create(this, R.raw.soundy);
         try {
             audioBackground.prepare();
@@ -38,12 +38,6 @@ public class MainActivity extends AppCompatActivity {
         }
         audioBackground.start();
 
-        audioBackground.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                stateAwal();
-            }
-        });
 
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,11 +72,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void stateAwal(){
-        pause.setEnabled(true);
-        stop.setEnabled(false);
-    }
-
     public void pause(){
         if(audioBackground.isPlaying()){
             if(audioBackground!=null){
@@ -98,16 +87,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void stop(){
-        audioBackground.stop();
-
-        try{
-            audioBackground.prepare();
-            audioBackground.seekTo(0);
-        }catch (Throwable t) {
-            t.printStackTrace();
+        if(audioBackground.isPlaying()){
+                audioBackground.stop();
+                stop.setImageResource(R.drawable.ic_play);
+        } else {
+                audioBackground = MediaPlayer.create(this, R.raw.soundy);
+                try {
+                    audioBackground.prepare();
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                audioBackground.start();
+                stop.setImageResource(R.drawable.ic_stop);
         }
-
-        stateAwal();
     }
 
     @Override

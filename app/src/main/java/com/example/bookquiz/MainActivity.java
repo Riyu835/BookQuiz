@@ -1,7 +1,5 @@
 package com.example.bookquiz;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -108,5 +106,15 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         audioBackground.stop();
         MainActivity.this.finish();
+    }
+
+    public void onPause() {
+        super.onPause();
+        audioBackground.stop();
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        audioBackground.stop();
     }
 }

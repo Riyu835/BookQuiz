@@ -102,17 +102,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //klo tombol back dipencet lagu berhenti
     @Override
     public void onBackPressed() {
         audioBackground.stop();
         MainActivity.this.finish();
     }
 
+    //klo dijadiin background app ato ganti app suara berhenti
     public void onPause() {
         super.onPause();
         audioBackground.stop();
     }
 
+    //klo dijalanin lg laguny dll mulai lg
     public void onResume(){
         super.onResume();
         audioBackground = MediaPlayer.create(this, R.raw.soundy);
@@ -159,11 +162,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //klo berhenti bener" berhenti lagu berhenti
     public void onStop(){
         super.onStop();
         audioBackground.stop();
     }
 
+    //klo dihancurin dr background app lagu berhenti
     public void onDestroy() {
         super.onDestroy();
         audioBackground.stop();

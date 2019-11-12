@@ -113,6 +113,57 @@ public class MainActivity extends AppCompatActivity {
         audioBackground.stop();
     }
 
+    public void onResume(){
+        super.onResume();
+        audioBackground = MediaPlayer.create(this, R.raw.soundy);
+        try {
+            audioBackground.prepare();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        audioBackground.start();
+
+
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pause();
+            }
+        });
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stop();
+            }
+        });
+
+        buttonDash = (Button) findViewById(R.id.buttonDash);
+        buttonDash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent dash = new Intent(MainActivity.this, DashboardActivity.class);
+                startActivity(dash);
+            }
+        });
+
+        buttonWho = (Button)findViewById(R.id.buttonWho);
+        buttonWho.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent who = new Intent(MainActivity.this, WhowroteitActivity.class);
+                startActivity(who);
+            }
+        });
+    }
+
+    public void onStop(){
+        super.onStop();
+        audioBackground.stop();
+    }
+
     public void onDestroy() {
         super.onDestroy();
         audioBackground.stop();
